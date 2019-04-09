@@ -27,23 +27,6 @@ __license__ = "gpl3"
 
 _logger = logging.getLogger(__name__)
 
-
-def fib(n):
-    """Fibonacci example function
-
-    Args:
-      n (int): integer
-
-    Returns:
-      int: n-th Fibonacci number
-    """
-    assert n > 0
-    a, b = 1, 1
-    for i in range(n-1):
-        a, b = b, a+b
-    return a
-
-
 def parse_args(args):
     """Parse command line parameters
 
@@ -54,14 +37,14 @@ def parse_args(args):
       :obj:`argparse.Namespace`: command line parameters namespace
     """
     parser = argparse.ArgumentParser(
-        description="Just a Fibonacci demonstration")
+        description="List page number sequence to print a small folded double sided booklet")
     parser.add_argument(
         "--version",
         action="version",
         version="twoup {ver}".format(ver=__version__))
     parser.add_argument(
         dest="n",
-        help="n-th Fibonacci number",
+        help="Number of pages in booklet to be printed",
         type=int,
         metavar="INT")
     parser.add_argument(
@@ -91,6 +74,16 @@ def setup_logging(loglevel):
     logging.basicConfig(level=loglevel, stream=sys.stdout,
                         format=logformat, datefmt="%Y-%m-%d %H:%M:%S")
 
+def print_page_order(print_string, upper, lower):
+    _logger.debug('print_page_order called with args print_string=%s, upper=%d, lower=%d' % (print_string, upper, lower))
+    if(lower < upper):
+        print_string += str(upper)+','
+        print_string += str(lower)+','
+        print_string += str(lower+1)+','
+        print_string += str(upper-1)+','
+        return print_page_order(print_string, upper-2, lower+2)
+    else:
+        return (print_string[:-1])
 
 def main(args):
     """Main entry point allowing external calls
@@ -100,9 +93,13 @@ def main(args):
     """
     args = parse_args(args)
     setup_logging(args.loglevel)
-    _logger.debug("Starting crazy calculations...")
-    print("The {}-th Fibonacci number is {}".format(args.n, fib(args.n)))
-    _logger.info("Script ends here")
+    _logger.debug("Main subroutine begins")
+    print_string = ''
+    if((args.n % 4) == 0):
+        print(print_page_order(print_string,args.n,1))
+    else:
+        _logger.warn("The number of pages in your booklet to be printed two sided must be a multiple of four. eg. 4,8,12...")
+    _logger.debug("Script ends here")
 
 
 def run():
