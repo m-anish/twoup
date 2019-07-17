@@ -8,9 +8,11 @@ List page number sequence to print a small folded double sided booklet
 To consult the gnome guide for two sided booklet printing, please visit [this](https://help.gnome.org/users/gnome-help/stable/printing-booklet-duplex.html.en) link. As part of the guide, you will require a listing of page numbers in a specific order, which this package provides.
 
 ## Usage
-`$ twoup`
-`Number of pages in your booklet (must be a multiple of four)? 8`
-`8,1,2,7,6,3,4,5`
+```
+$ twoup`
+Number of pages in your booklet (must be a multiple of four)? 8
+8,1,2,7,6,3,4,5
+```
 
 ## Note
 
